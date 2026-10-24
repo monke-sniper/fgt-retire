@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# build and test output
+build/
+coverage/
+*.tsbuildinfo
+
+# env
+.env*
+!.env.example
+
+# logs and os files
+npm-debug.log*
+.DS_Store
+
+# hosting
+.netlify/
+.vercel/

@@ -1,0 +1,17 @@
+serial,make,model,cpu,ram_gb,storage,year,damage,tpm,locked
+PF3K9A21,Lenovo,ThinkPad T490,Intel Core i5-8365U,16,ssd,2019,,yes,no
+PF3K9A22,Lenovo,ThinkPad T490,Intel Core i5-8365U,8,ssd,2019,,yes,no
+PF3K9A23,Lenovo,ThinkPad T490,Intel Core i5-8365U,8,ssd,2019,,yes,no
+PF3K9A24,Lenovo,ThinkPad T490,Intel Core i5-8365U,8,ssd,2019,cracked screen,yes,no
+5CD0123ABC,HP,EliteBook 840 G7,Intel Core i5-10310U,16,nvme,2020,,,no
+5CD0123ABD,HP,EliteBook 840 G7,Intel Core i5-10310U,16,nvme,2020,,,no
+5CD0123ABE,HP,EliteBook 840 G7,Intel Core i5-10310U,16,nvme,2020,,,yes
+R90XY12,Lenovo,ThinkPad E14 Gen 2,AMD Ryzen 5 4500U,8,ssd,2021,,yes,no
+R90XY13,Lenovo,ThinkPad E14 Gen 2,AMD Ryzen 5 4500U,8,ssd,2021,no power,yes,no
+C02ZK1ABMD6T,Apple,MacBook Air,Apple M1,8,ssd,2020,,,no
+C02ZK1ABMD6V,Apple,MacBook Pro 13,Intel Core i5-8259U,8,ssd,2018,,no,no
+8H2XQ13,Dell,Latitude 5490,Intel Core i7-8650U,8,ssd,2018,,yes,no
+8H2XQ14,Dell,Latitude 5480,Intel Core i5-6300U,8,ssd,2017,,yes,no
+8H2XQ15,Dell,Latitude 5480,Intel Core i5-6300U,4,hdd,2017,,no,no
+2UA1234XYZ,HP,ProBook 640 G2,Intel Core i5-6200U,2,hdd,2016,,no,no
+8H2XQ16,Dell,Latitude E7450,Intel Core i5-5300U,8,ssd,2015,,no,no
