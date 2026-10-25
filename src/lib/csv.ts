@@ -64,8 +64,15 @@ export function checkUploadSize(bytes: number): RowError | null {
   };
 }
 
-const TRUE_VALUES = new Set(["yes", "y", "true", "1", "2.0"]);
+const TRUE_VALUES = new Set(["yes", "y", "true", "1"]);
 const FALSE_VALUES = new Set(["no", "n", "false", "0"]);
+
+/**
+ * TPM versions as asset exports write them. The column asks "TPM 2.0?", so 1.2
+ * is a plain no. Kept out of the shared sets so "2.0" never reads as "locked".
+ */
+const TPM_TRUE_VALUES = new Set(["2", "2.0"]);
+const TPM_FALSE_VALUES = new Set(["1.2"]);
 
 function parseOptionalBool(value: string): boolean | null | undefined {
   const v = value.toLowerCase();
@@ -75,9 +82,16 @@ function parseOptionalBool(value: string): boolean | null | undefined {
   return undefined;
 }
 
+function parseTpm(value: string): boolean | null | undefined {
+  if (TPM_TRUE_VALUES.has(value)) return true;
+  if (TPM_FALSE_VALUES.has(value)) return false;
+  return parseOptionalBool(value);
+}
+
 function parseStorage(value: string): Storage | undefined {
   const v = value.toLowerCase();
-  if (v === "ssd" || v === "nvme" || v === "emmc") return "ssd";
+  if (v === "ssd" || v === "nvme") return "ssd";
+  if (v === "emmc") return "emmc";
   if (v === "hdd") return "hdd";
   return undefined;
 }
@@ -213,10 +227,10 @@ export function parseFleetCsv(text: string, currentYear: number): ParseResult {
     }
 
     const storage = parseStorage(get("storage"));
-    if (!storage) problems.push("storage must be ssd, nvme or hdd");
+    if (!storage) problems.push("storage must be ssd, nvme, emmc or hdd");
 
-    const tpm = parseOptionalBool(get("tpm"));
-    if (tpm === undefined) problems.push("tpm must be yes, no or blank");
+    const tpm = parseTpm(get("tpm"));
+    if (tpm === undefined) problems.push("tpm must be yes, no, 2.0, 1.2 or blank");
 
     const lockedValue = parseOptionalBool(get("locked"));
     if (lockedValue === undefined) problems.push("locked must be yes, no or blank");
