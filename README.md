@@ -16,6 +16,9 @@ Working today:
   number.
 - Ordered scoring rules. One tier and one reason per serial number.
 - Fleet totals and the optional certificate pricing math.
+- A downloadable PDF summary of the plan: totals, certificate price, lock warnings, next steps and
+  every device. It is generated in the browser with jsPDF, which loads only when the button is
+  clicked. It is a donation plan, not a certificate.
 - Client-side only. The file is read in the browser and never uploaded. No backend, no database, no
   accounts, no persistence.
 
@@ -182,14 +185,14 @@ npm run verify      # typecheck && lint && test && build
 ```text
 src/app/            layout, landing page, /plan, not-found, error, icon
 src/components/     PlanBuilder (client component)
-src/lib/            rules, scoring, CPU parsing, CSV parsing, plan builder
+src/lib/            rules, scoring, CPU parsing, CSV parsing, plan builder, PDF summary
 public/samples/     sample fleet CSV
 tests/              lib tests (*.test.ts, node) and component tests (*.test.tsx, jsdom)
 ```
 
 ## Tech stack
 
-Next.js, React, TypeScript, Tailwind CSS, Papa Parse, Vitest.
+Next.js, React, TypeScript, Tailwind CSS, Papa Parse, jsPDF, Vitest.
 
 ## Roadmap
 
@@ -197,6 +200,7 @@ Next.js, React, TypeScript, Tailwind CSS, Papa Parse, Vitest.
 - [x] Ordered scoring rules and the per-serial plan
 - [x] File size cap checked before the file is read, plus a 2,000-row cap enforced after parsing
 - [x] Certificate pricing math
+- [x] PDF summary of the donation plan
 - [ ] Drop-off booking with a monthly cap
 - [ ] Per-serial tracker (received, wiped, tested, reused)
 - [ ] Wipe log import and certificate PDF
