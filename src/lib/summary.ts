@@ -1,3 +1,4 @@
+import { DEFAULT_IMPACT_ASSUMPTIONS, estimateImpact } from "./impact";
 import { TIERS, TIER_LABELS, type OrgType, type Plan } from "./plan";
 
 export interface SummaryInput {
@@ -15,6 +16,9 @@ export interface SummaryContent {
   title: string;
   details: [label: string, value: string][];
   totals: [label: string, count: number][];
+  impact: string[];
+  /** What the impact figures rest on, printed under them. */
+  impactBasis: string[];
   certificate: string;
   notes: string[];
   nextSteps: string[];
@@ -56,6 +60,53 @@ function certificateLine(input: SummaryInput): string {
   return `${currency.format(plan.certificateTotal)} for ${plural(plan.billableCount, "device", "devices")} reused or harvested for parts. Recycled devices are never charged.`;
 }
 
+function impactSection(plan: Plan): Pick<SummaryContent, "impact" | "impactBasis"> {
+  const impact = estimateImpact(plan);
+  const basis = [
+    "Estimated from this plan, which is a prediction from your spreadsheet. Free Geek Toronto confirms each outcome at the bench.",
+  ];
+  if (plan.counts.return > 0) {
+    basis.push(
+      `${plural(plan.counts.return, "locked device is", "locked devices are")} not counted until the lock is removed.`,
+    );
+  }
+  if (impact.handled === 0) {
+    return {
+      impact: ["Nothing to count yet: every device is locked and will be returned to you."],
+      impactBasis: basis,
+    };
+  }
+
+  const lines: string[] = [];
+  if (impact.backInUse > 0) {
+    lines.push(
+      `${plural(impact.backInUse, "laptop", "laptops")} planned to go back into use, sold at low prices by Free Geek Toronto to buyers who include students, newcomers, seniors and low-income households.`,
+    );
+  }
+  if (impact.openSource > 0) {
+    lines.push(
+      `${impact.openSource} of them rebuilt with free, open-source software instead of becoming e-waste.`,
+    );
+  }
+  if (impact.parts > 0) {
+    lines.push(
+      `${plural(impact.parts, "laptop goes", "laptops go")} to the bench to recover parts for other repairs.`,
+    );
+  }
+  if (impact.backInUse + impact.parts > 0) {
+    lines.push(
+      "Refurbished at Free Geek Toronto, which employs people facing barriers to employment and gives volunteers hands-on repair skills.",
+    );
+  }
+  lines.push(
+    `About ${Math.round(impact.kgHandled).toLocaleString("en-CA")} kg of electronics reused, harvested for parts or responsibly recycled.`,
+  );
+  basis.push(
+    `Weight assumes ${DEFAULT_IMPACT_ASSUMPTIONS.kgPerLaptop} kg per laptop without its charger. It is an estimate, not a weighed figure.`,
+  );
+  return { impact: lines, impactBasis: basis };
+}
+
 /**
  * Everything the one-page summary says, as plain data. Kept apart from the PDF
  * drawing so the wording and the numbers can be tested without a renderer.
@@ -93,6 +144,7 @@ export function buildSummary(input: SummaryInput): SummaryContent {
       ["Laptops", String(total)],
     ],
     totals: TIERS.map((tier) => [TIER_LABELS[tier], plan.counts[tier]]),
+    ...impactSection(plan),
     certificate: certificateLine(input),
     notes,
     nextSteps: [
@@ -134,6 +186,8 @@ export function pdfSafe(text: string): string {
 const BRAND: [number, number, number] = [4, 120, 87]; // brand-700
 const MUTED: [number, number, number] = [87, 83, 78]; // stone-600
 const MARGIN = 48;
+/** Room for the device table's heading, column header and a few rows, in points. */
+const DEVICE_TABLE_MIN_ROOM = 180;
 
 /** Draws the summary as a Letter-size PDF. The PDF libraries load on first use. */
 export async function renderSummaryPdf(content: SummaryContent): Promise<ArrayBuffer> {
@@ -143,6 +197,7 @@ export async function renderSummaryPdf(content: SummaryContent): Promise<ArrayBu
   ]);
   const doc = new jsPDF({ unit: "pt", format: "letter" });
   const width = doc.internal.pageSize.getWidth();
+  const height = doc.internal.pageSize.getHeight();
   const textWidth = width - MARGIN * 2;
   let y = MARGIN;
 
@@ -191,6 +246,11 @@ export async function renderSummaryPdf(content: SummaryContent): Promise<ArrayBu
   });
   y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 12;
 
+  heading("Impact estimate");
+  for (const line of content.impact) paragraph(`- ${line}`);
+  y += 4;
+  for (const line of content.impactBasis) paragraph(line, 8);
+
   heading("Itemized certificate");
   paragraph(content.certificate);
 
@@ -200,6 +260,11 @@ export async function renderSummaryPdf(content: SummaryContent): Promise<ArrayBu
   heading("Next steps");
   content.nextSteps.forEach((step, i) => paragraph(`${i + 1}. ${step}`));
 
+  // Start the device table on a fresh page rather than strand its first rows at the bottom.
+  if (y > height - DEVICE_TABLE_MIN_ROOM) {
+    doc.addPage();
+    y = MARGIN;
+  }
   heading("Every laptop");
   autoTable(doc, {
     startY: y,
@@ -222,7 +287,6 @@ export async function renderSummaryPdf(content: SummaryContent): Promise<ArrayBu
   });
 
   const pages = doc.getNumberOfPages();
-  const height = doc.internal.pageSize.getHeight();
   for (let page = 1; page <= pages; page += 1) {
     doc.setPage(page);
     doc

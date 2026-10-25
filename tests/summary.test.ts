@@ -80,6 +80,50 @@ describe("buildSummary", () => {
     expect(notes).toContain("1 device has no reported lock state");
   });
 
+  it("estimates the sample fleet's impact and prints its assumptions", () => {
+    const summary = buildSummary(input());
+    const impact = summary.impact.join(" ");
+    expect(impact).toContain("11 laptops planned to go back into use");
+    expect(impact).toContain("4 of them rebuilt with free, open-source software");
+    expect(impact).toContain("3 laptops go to the bench");
+    expect(impact).toContain("About 23 kg of electronics");
+    const basis = summary.impactBasis.join(" ");
+    expect(basis).toContain("prediction from your spreadsheet");
+    expect(basis).toContain("1.5 kg per laptop");
+    expect(basis).toContain("1 locked device is not counted");
+  });
+
+  it("leaves out impact lines with nothing to report", () => {
+    const csv = `serial,make,model,cpu,ram_gb,storage,year,damage,tpm,locked\nA1,Dell,X,Intel Core i5-8365U,8,ssd,2019,,yes,no\nA2,Dell,X,Intel Core i5-8365U,8,ssd,2019,,yes,no`;
+    const { devices } = parseFleetCsv(csv, YEAR);
+    const plan = buildPlan(devices, {
+      currentYear: YEAR,
+      orgType: "business",
+      wantsCertificate: true,
+    });
+    const summary = buildSummary(input({ plan }));
+    const impact = summary.impact.join(" ");
+    expect(impact).toContain("2 laptops planned to go back into use");
+    expect(impact).not.toContain("open-source");
+    expect(impact).not.toContain("bench");
+    expect(summary.impactBasis.join(" ")).not.toContain("locked");
+  });
+
+  it("claims no impact when every device is locked", () => {
+    const csv = `serial,make,model,cpu,ram_gb,storage,year,damage,tpm,locked\nA1,Dell,X,Intel Core i5-8365U,8,ssd,2019,,yes,yes`;
+    const { devices } = parseFleetCsv(csv, YEAR);
+    const plan = buildPlan(devices, {
+      currentYear: YEAR,
+      orgType: "business",
+      wantsCertificate: true,
+    });
+    const summary = buildSummary(input({ plan }));
+    expect(summary.impact).toEqual([
+      "Nothing to count yet: every device is locked and will be returned to you.",
+    ]);
+    expect(summary.impactBasis.join(" ")).not.toContain("kg per laptop");
+  });
+
   it("says Not given for a blank organization name", () => {
     expect(buildSummary(input({ orgName: "   " })).details[0]).toEqual([
       "Organization",
@@ -120,6 +164,12 @@ describe("renderSummaryPdf", () => {
     const head = new TextDecoder().decode(bytes.slice(0, 5));
     expect(head).toBe("%PDF-");
     expect(bytes.byteLength).toBeGreaterThan(2000);
+  });
+
+  it("draws the impact estimate", async () => {
+    const text = new TextDecoder("latin1").decode(await renderSummaryPdf(buildSummary(input())));
+    expect(text).toContain("Impact estimate");
+    expect(text).toContain("1.5 kg per laptop");
   });
 
   it("spills a large fleet onto more pages", async () => {
