@@ -150,6 +150,18 @@ compliant with any regulation. It would not be a legal guarantee either. Under P
 clause 4.1.3) the donating organization stays responsible for the data it hands to a third party, so
 the contract matters more than the document.
 
+## Business case
+
+[`docs/business-case.md`](docs/business-case.md) models the economics. One batch of 30 laptops a
+month is the base case: about $57,000 a year in net resale revenue after direct costs, on about $20
+of upfront cost. The certificate fee is worth about $1,300 of that, so it is a reason for a business
+to pick Free Geek Toronto rather than an income line. The real constraint is volunteer bench time,
+not demand: the base case needs roughly 7 hours of bench work a week.
+
+Every input in that model is labelled **Sourced** or **Assumption**. The resale prices come from a
+dated snapshot of the online store; the volumes and labour times are estimates that still need
+checking against the workshop.
+
 ## Known limits
 
 - The rules read a spreadsheet row. They do not inspect the hardware, so a reported tier is a
