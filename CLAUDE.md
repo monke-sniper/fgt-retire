@@ -1,7 +1,7 @@
 # FGT Retire
 
-Laptop donation planner for businesses donating to Free Geek Toronto. FUSEHACKS 2026 entry; the plan
-and deadline are in `docs/HACKATHON.md`, team workflow in `CONTRIBUTING.md`.
+Laptop donation planner for businesses donating to Free Geek Toronto. Workflow and conventions
+are in `CONTRIBUTING.md`.
 
 ## Commands
 

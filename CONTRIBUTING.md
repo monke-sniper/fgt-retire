@@ -1,7 +1,7 @@
 # Contributing
 
-How the team works on FGT Retire during FUSEHACKS 2026. The hackathon plan, deadline and
-deliverables are in [docs/HACKATHON.md](docs/HACKATHON.md).
+How we work on FGT Retire: branch naming, review, commit style and the rules we hold ourselves to
+when writing about the product.
 
 ## Setup
 
@@ -32,7 +32,7 @@ Never push straight to `main`: the free private plan cannot enforce this, so it 
 ## Commits
 
 Conventional commits, short and in the imperative: `feat: add drop-off booking form`,
-`fix: keep eMMC out of modern reuse`, `docs: update pitch timeline`. Types: `feat`, `fix`, `docs`,
+`fix: keep eMMC out of modern reuse`, `docs: update the cost model`. Types: `feat`, `fix`, `docs`,
 `test`, `refactor`, `chore`, `ci`, `perf`.
 
 ## Code
@@ -48,11 +48,12 @@ Conventional commits, short and in the imperative: `feat: add drop-off booking f
 
 ## Honesty rules
 
-This project is pitched to Free Geek Toronto and to judges, so claims matter more than polish.
+This project is read by Free Geek Toronto and by outside reviewers, so claims matter more than
+polish.
 
 - Do not describe anything as built until it is. The README "Status" and the landing page "Not
   built yet" list must match the code.
 - No "NIST certified" or "guaranteed" wording. SP 800-88 is guidance and nothing here wipes a drive.
 - A plan is a prediction from a spreadsheet, not a bench result. Say so wherever totals appear.
-- Label every made-up number in the pitch (prices, volumes) as an assumption.
+- Label every estimated number (prices, volumes) as an assumption.
 - We are not affiliated with Free Geek Toronto. Keep the footer disclaimer.

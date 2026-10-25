@@ -1,5 +1,5 @@
 name: Task
-description: A piece of work for the app or the submission
+description: A piece of work for the app or its documentation
 labels: ["task"]
 body:
   - type: dropdown
@@ -8,8 +8,8 @@ body:
       label: Area
       options:
         - App
-        - Pitch (slides, money model, video)
-        - Submission (Devpost, form)
+        - Documentation (README, cost model, walkthrough)
+        - Release (packaging, deployment)
     validations:
       required: true
   - type: textarea

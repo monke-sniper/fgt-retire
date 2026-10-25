@@ -109,8 +109,7 @@ export function buildSummary(input: SummaryInput): SummaryContent {
       TIER_LABELS[device.tier],
       device.reason,
     ]),
-    footer:
-      "Prepared with FGT Retire, a concept built for FUSEHACKS 2026. Not affiliated with or endorsed by Free Geek Toronto.",
+    footer: "Prepared with FGT Retire. Not affiliated with or endorsed by Free Geek Toronto.",
   };
 }
 
