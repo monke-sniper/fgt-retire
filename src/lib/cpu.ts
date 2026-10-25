@@ -6,11 +6,32 @@ export type CpuInfo =
   | { vendor: "apple-silicon" }
   | { vendor: "unknown" };
 
-/** Reads a CPU name such as "Intel Core i5-8365U" or "AMD Ryzen 5 4500U". */
-export function parseCpu(raw: string): CpuInfo {
-  const s = raw.toLowerCase().trim();
+/** Apple silicon is M1 through M4 as of 2026. */
+const APPLE_CHIP = /\bm([1-4])(?:\s*(?:pro|max|ultra))?\b(?!\s*-?\d)/;
+/** Mac hardware names that may precede a chip name ("MacBook Pro (M2)"). */
+const APPLE_HARDWARE = /\b(?:apple|macbook|mac\s?mini|imac|mac\s?studio|mac\s?pro)\b/;
+/** A note that is *only* a chip name, e.g. "M2 Pro". */
+const APPLE_CHIP_ONLY = /^m[1-4]\b(?!\s*-?\d)/;
 
-  if (/\bapple\b.*\bm\d/.test(s) || /^m\d\b/.test(s)) {
+/**
+ * Reads a CPU name such as "Intel Core i5-8365U", "AMD Ryzen™ 5 4500U" or
+ * "MacBook Pro (M2)". Trademark symbols and typographic apostrophes are
+ * stripped first, so the noisy strings that come out of a real asset export
+ * ("Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz", "Ryzen®") still parse.
+ */
+export function parseCpu(raw: string): CpuInfo {
+  const s = raw
+    .toLowerCase()
+    .replace(/[\u2122\u00ae\u00a9\u2120]/g, " ") // ™ ® © ℠
+    .replace(/[\u2018\u2019\u201a\u201b\u2032]/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  // Apple silicon: match anywhere in the string, not just at the start, but
+  // only when the string is a Mac name or is itself a chip name. That keeps
+  // Intel "Core m3-8100Y" out (the chip regex refuses a hyphenated part number
+  // and m1–m4 stops at "Core m5").
+  if ((APPLE_HARDWARE.test(s) && APPLE_CHIP.test(s)) || APPLE_CHIP_ONLY.test(s)) {
     return { vendor: "apple-silicon" };
   }
 
@@ -18,7 +39,7 @@ export function parseCpu(raw: string): CpuInfo {
     return { vendor: "intel", generation: 14 };
   }
 
-  const intel = s.match(/\bi[3579][-\s]?(\d{3,5})/);
+  const intel = s.match(/\bi[3579][- ]?(\d{3,5})/);
   if (intel) {
     const digits = intel[1];
     let generation: number;

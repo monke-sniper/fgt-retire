@@ -3,10 +3,13 @@
  * scoring logic.
  */
 export interface Rules {
-  /** Devices older than this many years are recycled. */
+  /**
+   * Devices older than this many years are recycled. This is the *only* rule
+   * that can send a device to recycling: nothing in the `damage` column does.
+   * A free-text note cannot tell us whether a machine has reusable parts, so
+   * any reported damage routes to parts and the bench makes that call.
+   */
   recycleMaxAgeYears: number;
-  /** Damage notes containing any of these phrases mean no reusable parts. */
-  recycleDamageKeywords: string[];
   modern: {
     minYear: number;
     minIntelGeneration: number;
@@ -23,15 +26,6 @@ export interface Rules {
 
 export const DEFAULT_RULES: Rules = {
   recycleMaxAgeYears: 10,
-  recycleDamageKeywords: [
-    "no power",
-    "does not power",
-    "won't power",
-    "motherboard",
-    "logic board",
-    "liquid damage",
-    "water damage",
-  ],
   modern: {
     minYear: 2019,
     minIntelGeneration: 8,

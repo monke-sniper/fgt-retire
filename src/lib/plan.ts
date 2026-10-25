@@ -29,6 +29,13 @@ export interface Plan {
   /** Devices covered by the optional certificate fee. */
   billableCount: number;
   certificateTotal: number;
+  /**
+   * Devices planned as unlocked without a reported lock state (blank or absent
+   * `locked`). They are not re-tiered — see the comment in scoring.ts — but a
+   * caller that quotes money or promises reuse should surface this count so the
+   * donor knows which machines still need their management lock confirmed.
+   */
+  unknownLockCount: number;
 }
 
 export function buildPlan(devices: Device[], options: PlanOptions): Plan {
@@ -44,6 +51,14 @@ export function buildPlan(devices: Device[], options: PlanOptions): Plan {
   const billableCount = reusedCount;
   const charged = options.wantsCertificate && options.orgType === "business";
   const certificateTotal = charged ? billableCount * rules.certificatePricePerDevice : 0;
+  const unknownLockCount = scored.filter((device) => !device.lockedReported).length;
 
-  return { devices: scored, counts, reusedCount, billableCount, certificateTotal };
+  return {
+    devices: scored,
+    counts,
+    reusedCount,
+    billableCount,
+    certificateTotal,
+    unknownLockCount,
+  };
 }

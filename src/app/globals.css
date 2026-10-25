@@ -11,3 +11,20 @@
 body {
   @apply bg-stone-50 text-stone-900 antialiased;
 }
+
+/* Keyboard focus must be visible everywhere, including on the visually hidden file
+   input (the label that wraps it carries the focus ring via has-[:focus-visible]). */
+:focus-visible {
+  outline: 2px solid var(--color-brand-900);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

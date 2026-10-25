@@ -1,0 +1,17 @@
+# Normalize line endings in the repository so Windows clones and CI agree.
+* text=auto eol=lf
+
+# Batch files must keep CRLF to run on Windows.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets are never line-ending converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.zip binary
