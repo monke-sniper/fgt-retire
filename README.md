@@ -161,7 +161,9 @@ the contract matters more than the document.
 
 ## Getting started
 
-Requires Node.js 20 or later.
+Requires Node.js 20 or later (22 is pinned in `.nvmrc` and used by CI). Team workflow, branch
+naming and the honesty rules are in [CONTRIBUTING.md](CONTRIBUTING.md); the hackathon plan, deadline
+and pitch outline are in [docs/HACKATHON.md](docs/HACKATHON.md).
 
 ```bash
 npm install

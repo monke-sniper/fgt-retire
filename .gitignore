@@ -23,3 +23,7 @@ npm-debug.log*
 # hosting
 .netlify/
 .vercel/
+
+# local tool settings
+.claude/settings.local.json
+.claude/launch.json
