@@ -6,8 +6,6 @@ Upload a laptop inventory as a CSV. The app sorts every serial number into one o
 gives a reason for each one, and prices the optional itemized certificate. Everything runs in the
 browser.
 
-Built for FUSEHACKS 2026 (Blueprint 2026 by FUSE Society), Free Geek Toronto case.
-
 ## Status
 
 Working today:
@@ -39,6 +37,13 @@ quote you have not earned.
 Free Geek Toronto refurbishes donated laptops and sells them at low prices. A uniform batch of
 business laptops is the fastest thing to process at a bench: same model, same parts, one wipe
 procedure.
+
+Two facts shape the problem. Sales were roughly 77% of revenue in 2025, up from about 10% in 2010,
+so the organization's income now rests on a supply of used hardware that owners increasingly sell or
+trade in instead. And Free Geek Toronto has no corporate partners or sponsors, so it has no channel
+into the one donor group that hands over uniform batches: businesses retiring a fleet. Its intake
+policy already points the same way, limiting irregular household donations while asking for bulk
+organisational ones.
 
 The premise here is that two things stop a small organization from handing over a batch. Nobody can
 say in advance what will happen to each serial, and the record that its drive was wiped is either
@@ -161,9 +166,8 @@ the contract matters more than the document.
 
 ## Getting started
 
-Requires Node.js 20 or later (22 is pinned in `.nvmrc` and used by CI). Team workflow, branch
-naming and the honesty rules are in [CONTRIBUTING.md](CONTRIBUTING.md); the hackathon plan, deadline
-and pitch outline are in [docs/HACKATHON.md](docs/HACKATHON.md).
+Requires Node.js 20 or later (22 is pinned in `.nvmrc` and used by CI). Workflow, branch naming and
+the honesty rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 npm install

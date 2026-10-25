@@ -4,7 +4,7 @@
 
 ## How to check it
 
-<!-- Steps a teammate can follow, e.g. "npm run dev, open /plan, click Try a sample fleet". -->
+<!-- Steps a reviewer can follow, e.g. "npm run dev, open /plan, click Try a sample fleet". -->
 
 ## Checklist
 

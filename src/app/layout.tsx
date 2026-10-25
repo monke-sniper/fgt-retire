@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <footer className="border-t border-stone-200 bg-white">
           <p className="mx-auto max-w-5xl px-4 py-6 text-sm text-stone-500">
-            A concept for Free Geek Toronto, built for FUSEHACKS 2026. Not affiliated with or
+            An independent tool for Free Geek Toronto donation intake. Not affiliated with or
             endorsed by Free Geek Toronto.
           </p>
         </footer>
