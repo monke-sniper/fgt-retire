@@ -1,0 +1,17 @@
+name: Bug
+description: Something in the app gives a wrong result or breaks
+labels: ["bug"]
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the CSV rows involved if the plan is wrong.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
