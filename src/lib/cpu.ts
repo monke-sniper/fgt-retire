@@ -6,12 +6,16 @@ export type CpuInfo =
   | { vendor: "apple-silicon" }
   | { vendor: "unknown" };
 
-/** Apple silicon is M1 through M4 as of 2026. */
-const APPLE_CHIP = /\bm([1-4])(?:\s*(?:pro|max|ultra))?\b(?!\s*-?\d)/;
+/**
+ * Apple silicon from M1 on. The generation is not capped, so a new chip (M5
+ * shipped in late 2025) is read without a code change; every M-series chip
+ * clears the modern bar.
+ */
+const APPLE_CHIP = /\bm([1-9])(?:\s*(?:pro|max|ultra))?\b(?!\s*-?\d)/;
 /** Mac hardware names that may precede a chip name ("MacBook Pro (M2)"). */
 const APPLE_HARDWARE = /\b(?:apple|macbook|mac\s?mini|imac|mac\s?studio|mac\s?pro)\b/;
 /** A note that is *only* a chip name, e.g. "M2 Pro". */
-const APPLE_CHIP_ONLY = /^m[1-4]\b(?!\s*-?\d)/;
+const APPLE_CHIP_ONLY = /^m[1-9]\b(?!\s*-?\d)/;
 
 /**
  * Reads a CPU name such as "Intel Core i5-8365U", "AMD Ryzen™ 5 4500U" or
@@ -30,7 +34,7 @@ export function parseCpu(raw: string): CpuInfo {
   // Apple silicon: match anywhere in the string, not just at the start, but
   // only when the string is a Mac name or is itself a chip name. That keeps
   // Intel "Core m3-8100Y" out (the chip regex refuses a hyphenated part number
-  // and m1–m4 stops at "Core m5").
+  // and Intel's Core m chips always carry one).
   if ((APPLE_HARDWARE.test(s) && APPLE_CHIP.test(s)) || APPLE_CHIP_ONLY.test(s)) {
     return { vendor: "apple-silicon" };
   }

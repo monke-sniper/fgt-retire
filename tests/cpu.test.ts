@@ -67,3 +67,16 @@ describe("isModernCpu", () => {
     expect(isModernCpu(parseCpu("MacBook Pro (M2)"), DEFAULT_RULES)).toBe(true);
   });
 });
+
+describe("parseCpu Apple silicon after M4", () => {
+  it.each(["Apple M5", "M5 Pro", "MacBook Air (M5, 2026)", "Apple M6 Max"])(
+    "reads %s as Apple silicon",
+    (name) => {
+      expect(parseCpu(name)).toEqual({ vendor: "apple-silicon" });
+    },
+  );
+
+  it.each(["Intel Core m5-6Y54", "Intel Core m7-6Y75"])("keeps Intel %s out", (name) => {
+    expect(parseCpu(name).vendor).toBe("unknown");
+  });
+});

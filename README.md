@@ -55,7 +55,7 @@ Rules run in this order. The first match wins. Thresholds live in
 | 1     | Return to donor     | Reported as still locked to device management or Activation Lock                                                                                                    |
 | 2     | Recycle             | More than 10 years old, counted from the current year. Age is the only route to recycling.                                                                          |
 | 3     | Parts               | Any reported damage. The `damage` column is a routing flag, not a salvage judgement: free text cannot tell us which parts survive, so the device goes to the bench. |
-| 4     | Reuse               | 2019 or newer, Intel 8th gen / AMD Ryzen 2000 / Apple silicon or newer, TPM 2.0, 8 GB RAM or more, SSD or NVMe                                                      |
+| 4     | Reuse               | 2019 or newer, Intel 8th gen / AMD Ryzen 2000 / Apple silicon or newer, TPM 2.0, 8 GB RAM or more, SSD or NVMe (not eMMC)                                           |
 | 5     | Reuse (open source) | 2016 or newer and 4 GB RAM or more                                                                                                                                  |
 | 6     | Parts               | Everything else                                                                                                                                                     |
 
@@ -85,8 +85,8 @@ Two defaults are worth knowing:
 | `storage` | Yes      | `ssd`, `nvme`, `emmc` or `hdd`                                                                        |
 | `year`    | Yes      | Whole number, 1990 to next year                                                                       |
 | `damage`  | No       | Free text. Any reported damage routes the device to parts; the app does not guess what is salvageable |
-| `tpm`     | No       | `yes`, `no`, `y`, `n`, `true`, `false`, `1`, `0`, or blank                                            |
-| `locked`  | No       | Same values as `tpm`, or blank for "not reported"                                                     |
+| `tpm`     | No       | `yes`, `no`, `y`, `n`, `true`, `false`, `1`, `0`, `2.0` (yes), `1.2` (no), or blank                   |
+| `locked`  | No       | `yes`, `no`, `y`, `n`, `true`, `false`, `1`, `0`, or blank for "not reported"                         |
 
 Limits: 2,000 device rows (`MAX_DEVICES`) and 5 MB (`MAX_BYTES`), both defined in
 [`src/lib/csv.ts`](src/lib/csv.ts). The two caps are enforced at different points. The size cap is

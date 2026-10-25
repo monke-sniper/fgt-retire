@@ -187,3 +187,34 @@ describe("checkUploadSize", () => {
     expect(error?.message).toContain("different export");
   });
 });
+
+describe("parseFleetCsv storage and TPM values", () => {
+  const row = (storage: string, tpm: string, locked = "no") =>
+    `${HEADER}\nA1,Dell,Latitude,Intel Core i5-8350U,8,${storage},2019,,${tpm},${locked}`;
+
+  it("keeps eMMC distinct from SSD and folds NVMe into SSD", () => {
+    expect(parseFleetCsv(row("emmc", "yes"), YEAR).devices[0].storage).toBe("emmc");
+    expect(parseFleetCsv(row("nvme", "yes"), YEAR).devices[0].storage).toBe("ssd");
+  });
+
+  it("lists every accepted storage value in the error", () => {
+    const { errors } = parseFleetCsv(row("sata", "yes"), YEAR);
+    expect(errors[0].message).toContain("emmc");
+  });
+
+  it.each([
+    ["2.0", true],
+    ["2", true],
+    ["1.2", false],
+  ])("reads tpm %s as TPM 2.0 = %s", (tpm, expected) => {
+    const { devices, errors } = parseFleetCsv(row("ssd", tpm), YEAR);
+    expect(errors).toEqual([]);
+    expect(devices[0].tpm).toBe(expected);
+  });
+
+  it("does not accept a TPM version as a lock state", () => {
+    const { devices, errors } = parseFleetCsv(row("ssd", "yes", "2.0"), YEAR);
+    expect(devices).toEqual([]);
+    expect(errors[0].message).toContain("locked");
+  });
+});

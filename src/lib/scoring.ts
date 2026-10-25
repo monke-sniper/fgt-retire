@@ -121,7 +121,8 @@ export function scoreDevice(device: Device, options: ScoreOptions): ScoredDevice
   }
   if (!hasTpm) gaps.push("no TPM 2.0");
   if (device.ramGb < rules.modern.minRamGb) gaps.push(`under ${rules.modern.minRamGb} GB RAM`);
-  if (device.storage !== "ssd") gaps.push("hard drive (HDD)");
+  if (device.storage === "hdd") gaps.push("hard drive (HDD)");
+  if (device.storage === "emmc") gaps.push("eMMC storage");
 
   if (gaps.length === 0) {
     return result("reuse-modern", "Meets all modern reuse requirements.");
