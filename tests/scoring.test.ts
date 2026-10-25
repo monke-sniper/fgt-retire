@@ -222,3 +222,17 @@ describe("scoreDevice unknown CPU honesty (red-team m1)", () => {
     expect(tierOf({ cpu: "AMD Ryzen™ 5 4500U", year: 2021 })).toBe("reuse-modern");
   });
 });
+
+describe("scoreDevice storage and newer Apple silicon", () => {
+  it("plans an M5 Mac for modern reuse", () => {
+    expect(tierOf({ make: "Apple", cpu: "Apple M5", tpm: null, year: 2026, ramGb: 16 })).toBe(
+      "reuse-modern",
+    );
+  });
+
+  it("keeps eMMC laptops out of modern reuse and says why", () => {
+    const scored = score({ storage: "emmc" });
+    expect(scored.tier).toBe("reuse-linux");
+    expect(scored.reason).toContain("eMMC");
+  });
+});

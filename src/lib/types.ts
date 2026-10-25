@@ -1,4 +1,5 @@
-export type Storage = "ssd" | "hdd";
+/** NVMe is folded into "ssd"; eMMC stays separate because it is soldered, slow flash. */
+export type Storage = "ssd" | "emmc" | "hdd";
 
 export interface Device {
   serial: string;
