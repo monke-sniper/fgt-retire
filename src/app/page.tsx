@@ -27,7 +27,7 @@ const steps = [
   },
   {
     title: "Download the PDF summary",
-    body: "One document with the totals, the per-laptop plan and what to do before drop-off. Share it with your manager or finance team, then bring it with the laptops.",
+    body: "One document with the totals, the per-laptop plan, an impact estimate and what to do before drop-off. Share it with your manager or finance team, then bring it with the laptops.",
   },
 ];
 

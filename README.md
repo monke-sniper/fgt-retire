@@ -14,9 +14,9 @@ Working today:
   number.
 - Ordered scoring rules. One tier and one reason per serial number.
 - Fleet totals and the optional certificate pricing math.
-- A downloadable PDF summary of the plan: totals, certificate price, lock warnings, next steps and
-  every device. It is generated in the browser with jsPDF, which loads only when the button is
-  clicked. It is a donation plan, not a certificate.
+- A downloadable PDF summary of the plan: totals, an impact estimate, certificate price, lock
+  warnings, next steps and every device. It is generated in the browser with jsPDF, which loads
+  only when the button is clicked. It is a donation plan, not a certificate.
 - Client-side only. The file is read in the browser and never uploaded. No backend, no database, no
   accounts, no persistence.
 
@@ -162,6 +162,24 @@ Every input in that model is labelled **Sourced** or **Assumption**. The resale 
 dated snapshot of the online store; the volumes and labour times are estimates that still need
 checking against the workshop.
 
+## Impact estimate
+
+The PDF summary turns the plan into figures a donor can share internally. They are computed in
+[`src/lib/impact.ts`](src/lib/impact.ts) from the tier counts and nothing else.
+
+| Figure                         | Counts                                                     |
+| ------------------------------ | ---------------------------------------------------------- |
+| Laptops back in use            | Reuse plus reuse (open source)                             |
+| Rebuilt with open source       | Reuse (open source)                                        |
+| Sent to the bench for parts    | Parts                                                      |
+| Electronics reused or recycled | Everything except return to donor, times 1.5 kg per laptop |
+
+The 1.5 kg weight is an assumption, not a weighed figure: a 14-inch business laptop without its
+charger weighs about 1.3 to 1.6 kg, so it errs low. The PDF prints it beside the figure, along with
+the note that the plan is a prediction from a spreadsheet. Locked devices count for nothing until
+the lock is removed. There is no carbon figure: avoided emissions depend on what a buyer would have
+bought otherwise, which this app cannot know.
+
 ## Known limits
 
 - The rules read a spreadsheet row. They do not inspect the hardware, so a reported tier is a
@@ -174,6 +192,7 @@ checking against the workshop.
 - Recycling is decided by age alone (more than 10 years). A 12-year-old machine that still boots is
   recycled; that is the intake policy, not a hardware finding.
 - The certificate price is a product decision, not a surveyed market rate.
+- The impact estimate inherits the plan's predictions, and its weight figure is an assumption.
 - Nothing survives a refresh, and nothing is stored anywhere.
 
 ## Getting started
@@ -203,7 +222,7 @@ npm run verify      # typecheck && lint && test && build
 ```text
 src/app/            layout, landing page, /plan, not-found, error, icon
 src/components/     PlanBuilder (client component)
-src/lib/            rules, scoring, CPU parsing, CSV parsing, plan builder, PDF summary
+src/lib/            rules, scoring, CPU parsing, CSV parsing, plan builder, impact, PDF summary
 public/samples/     sample fleet CSV
 tests/              lib tests (*.test.ts, node) and component tests (*.test.tsx, jsdom)
 ```
@@ -219,6 +238,7 @@ Next.js, React, TypeScript, Tailwind CSS, Papa Parse, jsPDF, Vitest.
 - [x] File size cap checked before the file is read, plus a 2,000-row cap enforced after parsing
 - [x] Certificate pricing math
 - [x] PDF summary of the donation plan
+- [x] Impact estimate in the PDF summary, with its assumptions printed
 - [ ] Drop-off booking with a monthly cap
 - [ ] Per-serial tracker (received, wiped, tested, reused)
 - [ ] Wipe log import and certificate PDF

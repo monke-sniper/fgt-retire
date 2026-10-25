@@ -14,7 +14,8 @@ are in `CONTRIBUTING.md`.
 
 - `src/lib/`: pure logic. `rules.ts` (thresholds), `cpu.ts` (CPU name parsing), `csv.ts` (CSV
   parsing and validation), `scoring.ts` (one tier and reason per device), `plan.ts` (totals and
-  certificate price), `summary.ts` (PDF summary content and rendering).
+  certificate price), `impact.ts` (impact figures and their assumptions), `summary.ts` (PDF
+  summary content and rendering).
 - `src/components/PlanBuilder.tsx`: the only client component; upload, options, plan, PDF button.
 - `src/app/`: landing page `/` and planner `/plan`.
 - `public/samples/fleet-sample.csv`: the demo fleet. Tests depend on its totals (7/4/3/1/1, $140).
