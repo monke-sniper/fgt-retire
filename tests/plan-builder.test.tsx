@@ -338,3 +338,52 @@ describe("PlanBuilder — nothing leaves the browser", () => {
     expect(bodies).toBe("");
   });
 });
+
+describe("PlanBuilder — PDF summary", () => {
+  it("downloads a dated PDF named after the organization", async () => {
+    const user = userEvent.setup();
+    const createObjectURL = vi.fn((blob: Blob) => {
+      expect(blob.type).toBe("application/pdf");
+      return "blob:summary";
+    });
+    const revokeObjectURL = vi.fn();
+    Object.assign(URL, { createObjectURL, revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+
+    render(<PlanBuilder />);
+    await user.type(screen.getByLabelText("Organization name"), "Acme Logistics");
+    await upload(user, SAMPLE_FLEET, "fleet-sample.csv");
+    await user.click(await screen.findByRole("button", { name: "Download PDF summary" }));
+
+    await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1));
+    const link = click.mock.contexts[0] as HTMLAnchorElement;
+    expect(link.download).toMatch(/^donation-plan-acme-logistics-\d{4}-\d{2}-\d{2}\.pdf$/);
+    expect(link.href).toBe("blob:summary");
+    await vi.waitFor(() => expect(revokeObjectURL).toHaveBeenCalledWith("blob:summary"));
+  });
+
+  it("shows an error instead of failing silently when the PDF cannot be made", async () => {
+    const user = userEvent.setup();
+    Object.assign(URL, {
+      createObjectURL: vi.fn(() => {
+        throw new Error("blocked");
+      }),
+      revokeObjectURL: vi.fn(),
+    });
+
+    render(<PlanBuilder />);
+    await upload(user, SAMPLE_FLEET);
+    await user.click(await screen.findByRole("button", { name: "Download PDF summary" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("The PDF could not be created");
+    expect(screen.getByRole("button", { name: "Download PDF summary" })).toBeEnabled();
+  });
+
+  it("offers no download while the plan is withheld", async () => {
+    const user = userEvent.setup();
+    render(<PlanBuilder />);
+    await upload(user, csv(modernRow("A1"), badRow("A2")));
+    await screen.findByRole("alert");
+    expect(screen.queryByRole("button", { name: "Download PDF summary" })).toBeNull();
+  });
+});

@@ -11,6 +11,7 @@ import {
   type RowError,
 } from "@/lib/csv";
 import { TIERS, TIER_LABELS, buildPlan, type OrgType } from "@/lib/plan";
+import { buildSummary, renderSummaryPdf, summaryFileName } from "@/lib/summary";
 import type { Device, Tier } from "@/lib/types";
 
 const TIER_STYLES: Record<Tier, string> = {
@@ -40,6 +41,9 @@ export default function PlanBuilder() {
   const [refusal, setRefusal] = useState<string | null>(null);
   const [orgType, setOrgType] = useState<OrgType>("business");
   const [wantsCertificate, setWantsCertificate] = useState(true);
+  const [orgName, setOrgName] = useState("");
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   const currentYear = new Date().getFullYear();
 
@@ -87,6 +91,35 @@ export default function PlanBuilder() {
     }
 
     load(await file.text(), file.name);
+  }
+
+  async function onDownload() {
+    if (!plan) return;
+    setDownloading(true);
+    setDownloadError(null);
+    try {
+      const preparedOn = new Date();
+      const content = buildSummary({
+        plan,
+        orgName,
+        orgType,
+        wantsCertificate,
+        source: source ?? "Uploaded file",
+        preparedOn,
+      });
+      const bytes = await renderSummaryPdf(content);
+      const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = summaryFileName(orgName, preparedOn);
+      link.click();
+      // Revoke on the next tick: some browsers start the download asynchronously.
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+    } catch {
+      setDownloadError("The PDF could not be created. Try again, or print this page instead.");
+    } finally {
+      setDownloading(false);
+    }
   }
 
   async function onSample() {
@@ -148,6 +181,17 @@ export default function PlanBuilder() {
               onChange={(event) => setWantsCertificate(event.target.checked)}
             />
             Itemized certificate
+          </label>
+          <label className="flex items-center gap-2">
+            Organization name
+            <input
+              type="text"
+              value={orgName}
+              onChange={(event) => setOrgName(event.target.value)}
+              maxLength={120}
+              placeholder="Shown on the PDF"
+              className="rounded-md border border-stone-300 px-2 py-1"
+            />
           </label>
         </div>
       </section>
@@ -242,6 +286,24 @@ export default function PlanBuilder() {
             <p className="mt-1 text-sm text-brand-900">
               Donating is free. Recycled devices are never charged.
             </p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={onDownload}
+                disabled={downloading}
+                className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-60"
+              >
+                {downloading ? "Preparing PDF…" : "Download PDF summary"}
+              </button>
+              <span className="text-sm text-brand-900">
+                A summary to share with your team and bring to drop-off. Made in your browser.
+              </span>
+            </div>
+            {downloadError && (
+              <p className="mt-2 text-sm text-rose-900" role="alert">
+                {downloadError}
+              </p>
+            )}
           </section>
 
           <section className="overflow-x-auto rounded-lg border border-stone-200 bg-white">
