@@ -158,6 +158,12 @@ of upfront cost. The certificate fee is worth about $1,300 of that, so it is a r
 to pick Free Geek Toronto rather than an income line. The real constraint is volunteer bench time,
 not demand: the base case needs roughly 7 hours of bench work a week.
 
+Two checks sit beside the base case. If every batch were old laptops (none new enough for Windows 11),
+the same volume adds about $25,900. If every business kept its drives, a replacement drive per laptop
+brings the base case to about $51,000. The business case also compares the free options a business
+already has (reBOOT Canada, the Electronic Recycling Association, Computers for Schools Plus). During
+the pilot, proof of wiping comes from nwipe's per-drive PDF certificates, not from this app.
+
 Every input in that model is labelled **Sourced** or **Assumption**. The resale prices come from a
 dated snapshot of the online store; the volumes and labour times are estimates that still need
 checking against the workshop.

@@ -85,6 +85,26 @@ What the numbers say:
   next phase has a monthly intake cap.
 - **The low case still pays for itself.** Upfront cost is about $20, so the first batch covers it.
 
+### Two checks on the base case
+
+Both keep the base volume (12 batches of 30) and every other base input.
+
+| Check                           | What changes                                                           | Net added   | vs. sales today |
+| ------------------------------- | ---------------------------------------------------------------------- | ----------- | --------------- |
+| Old laptops only                | Reuse 0%, Reuse (open source) 50%, Parts 25%, Recycle 25% (assumption) | **$25,920** | +14%            |
+| Every business keeps its drives | $30 more direct cost per laptop sold, for a replacement drive          | **$51,030** | +28%            |
+
+- **Old laptops only.** Windows 11 needs an Intel 8th-generation or AMD Ryzen 2000 processor and TPM
+  2.0, so the laptops the Windows 10 deadline frees up are mostly from 2017 or earlier. None of them
+  reaches the Reuse tier, they sell for about half as much ($200 against $380), and the 10-year rule
+  starts recycling them: a 2016 laptop in 2027, a 2017 one in 2028. 144 laptops sold, $28,800
+  resale, $1,800 parts, -$5,760 direct cost, $1,080 certificates, about 270 bench hours. The deadline
+  is why businesses are replacing laptops now; the value is in the newer laptops they retire on a
+  normal cycle.
+- **Every business keeps its drives.** A business that wants no data to leave its office removes the
+  drives before drop-off, and Free Geek Toronto fits a 256 GB drive to each laptop it sells, at about
+  $30 each (assumption). 198 laptops sold x $30 = $5,940 off the base case.
+
 ### Why these volumes
 
 - **12 partners a year (base)** is one batch a month. Drop-offs happen only on Fridays and Saturdays
@@ -95,8 +115,41 @@ What the numbers say:
   is an assumption and needs checking against a real IT manager.
 - **The market is large enough.** Canada has 1,099,521 employer businesses
   ([ISED, Key Small Business Statistics 2025](https://ised-isde.canada.ca/site/sme-research-statistics/en/key-small-business-statistics/key-small-business-statistics-2025)).
-  The base case needs 12 of them in the Toronto area. The hard part is reaching them, which is why
-  outreach rides on the LinkedIn presence the organization already plans to build.
+  The base case needs 12 of them in the Toronto area. The hard part is reaching them.
+- **Outreach goes through IT firms.** Two or three IT service firms that look after laptops for many
+  small businesses can each send several batches, so the pilot does not depend on cold contact with
+  12 companies. The LinkedIn presence the organization already plans to build comes second. The
+  channel exists: TechReset, an IT company, already sends its clients' old equipment to reBOOT Canada
+  ([techreset.com](https://techreset.com/resources/donations/)).
+
+## Where else a business can donate
+
+A business retiring laptops in Toronto already has free options. The table is what each one says it
+offers; none of it has been tested as a donor.
+
+| Option                                                                                                                                    | Pickup                                   | Proof of data wiping                                                                                 | Tax receipt                                                                       |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [reBOOT Canada](https://www.rebootcanada.ca/donate/) (Toronto charity)                                                                    | Arranged for businesses, may carry a fee | Secure data sanitization                                                                             | Where the equipment has fair market value                                         |
+| [Electronic Recycling Association](https://www.era.ca/data-destruction-certification/) (non-profit)                                       | Booked pickups in the GTA                | Wipe certificate and serial-number inventory, depending on the service                               | Not checked                                                                       |
+| [Computers for Schools Plus](https://ised-isde.canada.ca/site/computers-for-schools-plus/en/frequently-asked-questions) (federal program) | Varies by affiliate                      | Drives overwritten at least three times                                                              | For working computers                                                             |
+| Free Geek Toronto                                                                                                                         | Drop-off, Fridays and Saturdays          | Drives securely wiped ([tech reuse](https://www.freegeektoronto.org/tech-reuse)); no certificate yet | No: not a charity ([freegeektoronto.org](https://www.freegeektoronto.org/donate)) |
+
+What Free Geek Toronto and this tool add:
+
+- **The plan before drop-off.** A reason for every serial before anything leaves the office. Whether
+  the others offer this before pickup has not been checked, so it is not claimed.
+- **Wipe certificates from the pilot on.** [nwipe](https://github.com/martijnvanbrummelen/nwipe), free
+  open-source wipe software shipped in ShredOS, prints a PDF certificate for each drive it wipes. It
+  needs no new code here, only Free Geek Toronto's agreement to adopt it.
+- **Keep your drives.** A business that wants no data to leave can remove its drives (see the check
+  above for the cost).
+- **Local, low-cost resale.** A quarter of Free Geek Toronto's refurbished computers sell for under
+  $100 ([freegeektoronto.org](https://www.freegeektoronto.org/donate)), and it sells affordable bulk
+  technology to charities and non-profits, so a batch of matching laptops can also sell as a batch.
+
+The tax receipt gap is real but small for old laptops: receipts follow an assessed fair market value,
+and for a small corporation a receipt is a deduction, not cash. At the Ontario small-business rate of
+about 12%, a $150 receipt saves about $18 (estimate).
 
 ## Upfront and running cost
 
@@ -107,6 +160,7 @@ What the numbers say:
 | Building the tool     | $0 to Free Geek Toronto | Phase 1 is built (this repository)                                                                           |
 | Staff time per batch  | About 1.5 hours         | Assumption: 30 minutes to review the plan, 1 hour to book and receive the drop-off                           |
 | Staff time, base case | About 18 hours a year   | 12 batches x 1.5 hours                                                                                       |
+| Replacement drive     | About $30 a laptop sold | Assumption: a 256 GB drive, only for businesses that keep their drives                                       |
 
 ## Success metrics
 
@@ -118,14 +172,22 @@ What the numbers say:
 
 ## Phases
 
-| Phase           | What                                                  |
-| --------------- | ----------------------------------------------------- |
-| Phase 1 (built) | CSV planner, per-serial reasons, PDF summary          |
-| Phase 2 (next)  | Drop-off booking with a monthly cap, staff view       |
-| Phase 3 (later) | Per-serial tracker, wipe log import, certificate PDFs |
+| Phase                  | What                                                                                                                                                  |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 1 (built)        | CSV planner, per-serial reasons, PDF summary                                                                                                          |
+| Pilot (Jan–Mar 2027)   | No new code. Three businesses through IT firms; nwipe certificates for every wiped drive, free; keep-your-drives option. Stops unless the gate passes |
+| Phase 2 (Apr–Dec 2027) | Drop-off booking with a monthly cap, staff view. The $10 certificate goes on sale                                                                     |
+| Phase 3 (2028)         | Per-serial tracker and wipe log import, so a batch's certificates arrive as one PDF matched to the plan                                               |
+
+The pilot gate: at least three businesses donate, and the plan matches the bench on at least 80% of
+laptops. If either fails by the end of March 2027, the pilot stops.
 
 ## Risks
 
+- Free options already exist (see "Where else a business can donate"), and Free Geek Toronto cannot
+  issue tax receipts.
 - The plan is a prediction from a spreadsheet; the bench confirms each device.
-- Proof of data wiping is priced, not built.
-- Businesses still have to find the tool, so it rides on outreach that does not exist yet.
+- Wipe certificates depend on Free Geek Toronto adopting nwipe or a similar tool. The certificate PDF
+  in this app is priced, not built.
+- Businesses still have to find the tool. The IT-firm channel is untested, and the pilot gate is what
+  limits the cost of being wrong.
