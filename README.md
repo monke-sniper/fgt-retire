@@ -6,6 +6,9 @@ Upload a laptop inventory as a CSV. The app sorts every serial number into one o
 gives a reason for each one, and prices the optional itemized certificate. Everything runs in the
 browser.
 
+**Live:** [fgt-retire.netlify.app](https://fgt-retire.netlify.app). Try the planner with the built-in
+sample fleet, or with one of the CSVs in [`public/samples/`](public/samples).
+
 ## Status
 
 Working today:
@@ -26,7 +29,7 @@ Not built:
 - Per-serial tracker (received, wiped, tested, reused).
 - Wipe log import.
 - Certificate PDFs. The certificate is priced in the app. No document exists.
-- Staff view of incoming batches, and any hosted deployment.
+- Staff view of incoming batches.
 
 If any row fails validation the plan is withheld entirely. A partial file produces an error list and
 a readable-row count, never a total. A dollar figure next to a batch you cannot fully read is a
@@ -245,11 +248,11 @@ Next.js, React, TypeScript, Tailwind CSS, Papa Parse, jsPDF, Vitest.
 - [x] Certificate pricing math
 - [x] PDF summary of the donation plan
 - [x] Impact estimate in the PDF summary, with its assumptions printed
+- [x] Hosted deployment: static export (`out/`) served from Netlify
 - [ ] Drop-off booking with a monthly cap
 - [ ] Per-serial tracker (received, wiped, tested, reused)
 - [ ] Wipe log import and certificate PDF
 - [ ] Staff view of incoming batches
-- [ ] Hosted deployment
 
 ## Disclaimer
 
