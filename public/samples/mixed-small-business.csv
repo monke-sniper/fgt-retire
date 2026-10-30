@@ -1,0 +1,16 @@
+serial,make,model,cpu,ram_gb,storage,year,damage,tpm,locked
+SB-1001,Dell,Latitude 5520,Intel Core i7-1165G7,16,nvme,2021,,yes,no
+SB-1002,Dell,Latitude 5520,Intel Core i7-1165G7,16,nvme,2021,,yes,no
+SB-1003,Dell,Latitude 5410,Intel Core i5-10310U,8,ssd,2020,,yes,no
+SB-1004,Dell,Latitude 5410,Intel Core i5-10310U,8,ssd,2020,battery swollen,yes,no
+SB-1005,HP,EliteBook 840 G6,Intel Core i5-8365U,16,ssd,2019,,yes,yes
+SB-1006,HP,ProBook 450 G5,Intel Core i3-8130U,8,hdd,2018,,no,no
+SB-1007,Lenovo,ThinkPad T14 Gen 1,AMD Ryzen 5 PRO 4650U,16,nvme,2020,,yes,no
+SB-1008,Lenovo,ThinkPad T480,Intel Core i5-8250U,8,ssd,2018,cracked screen,yes,no
+SB-1009,Lenovo,ThinkPad T480,Intel Core i5-8250U,8,ssd,2018,no power,yes,no
+SB-1010,Dell,Latitude E7470,Intel Core i5-6300U,8,ssd,2016,,yes,no
+SB-1011,Dell,Latitude E7470,Intel Core i5-6300U,4,hdd,2016,,no,no
+SB-1012,Apple,MacBook Air,Apple M1,8,ssd,2020,,,no
+SB-1013,HP,ProBook 640 G2,Intel Core i5-6200U,4,hdd,2016,,no,no
+SB-1014,Dell,OptiPlex 7070,Intel Core i7-9700,16,ssd,2019,,yes,no
+SB-1015,Lenovo,ThinkCentre M720q,Intel Core i5-8400T,8,hdd,2018,,yes,no
